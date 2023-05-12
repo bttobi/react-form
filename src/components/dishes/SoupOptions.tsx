@@ -1,7 +1,10 @@
 import { TextField } from "@mui/material";
 import { motion } from "framer-motion";
 
-const SoupOptions: React.FC<{ register: any }> = ({ register }) => {
+const SoupOptions: React.FC<{ register: any; errors: any }> = ({
+  register,
+  errors,
+}) => {
   return (
     <motion.div
       className="flex flex-col gap-4"
@@ -9,14 +12,19 @@ const SoupOptions: React.FC<{ register: any }> = ({ register }) => {
       animate={{ scaleY: 1 }}
       exit={{ scaleY: 0 }}
     >
+      {errors?.spiciness_scale && (
+        <p className="text-red-400 text-center">
+          {errors?.spiciness_scale?.message}
+        </p>
+      )}
       <TextField
         {...register("spiciness_scale", {
-          required: true,
+          required: { value: true, message: "This field is required" },
           shouldUnregister: true,
-          minValue: 1,
-          maxValue: 10,
+          valueAsNumber: true,
+          min: { value: 1, message: "Must be greater than 1" },
+          max: { value: 10, message: "Must be smaller than 10" },
         })}
-        required
         type="number"
         variant="outlined"
         aria-label="spiciness_scale"

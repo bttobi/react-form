@@ -6,17 +6,26 @@ import SandwichOptions from "./dishes/SandwichOptions";
 const DishOptions: React.FC<{
   chosenDish: string | undefined;
   register: any;
-}> = ({ chosenDish, register }) => {
+  errors: any;
+}> = ({ chosenDish, register, errors }) => {
   const chooseDish = (): JSX.Element | null => {
     switch (chosenDish) {
       case "pizza":
-        return <PizzaOptions key={"pizza"} register={register} />;
+        return (
+          <PizzaOptions key={"pizza"} register={register} errors={errors} />
+        );
 
       case "soup":
-        return <SoupOptions key={"soup"} register={register} />;
+        return <SoupOptions key={"soup"} register={register} errors={errors} />;
 
       case "sandwich":
-        return <SandwichOptions key={"sandwich"} register={register} />;
+        return (
+          <SandwichOptions
+            key={"sandwich"}
+            register={register}
+            errors={errors}
+          />
+        );
 
       default:
         return null;

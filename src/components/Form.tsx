@@ -13,6 +13,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import DishOptions from "./DishOptions";
 import submitToApi from "../functions/submitToApi";
 
+type FormInputs = {
+  name: string;
+  preparation_time: string;
+  type: string;
+  no_of_slices: number;
+  diameter: number;
+  slices_of_bread: number;
+  spiciness_scale: number;
+};
+
 export const Form: React.FC = () => {
   const [currentDish, setcurrentDish] = useState<string | undefined>("pizza");
   const [showNotification, setshowNotification] = useState<boolean>(false);
@@ -21,8 +31,10 @@ export const Form: React.FC = () => {
   const {
     register,
     handleSubmit,
+    reset,
+    setError,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormInputs>({
     defaultValues: {
       name: "",
       preparation_time: "00:00:00",
@@ -32,10 +44,43 @@ export const Form: React.FC = () => {
   });
   const options: string[] = ["pizza", "soup", "sandwich"];
 
-  const checkErrors = async (data: any): Promise<void> => {
+  const sendForm = async (data: FormInputs): Promise<void> => {
+    [
+      {
+        name: "name",
+        type: "custom",
+      },
+      {
+        name: "preparation_time",
+        type: "focus",
+      },
+      {
+        name: "preparation_time",
+        type: "custom",
+      },
+      {
+        name: "no_of_slices",
+        type: "custom",
+      },
+      {
+        name: "diameter",
+        type: "custom",
+      },
+      {
+        name: "slices_of_bread",
+        type: "custom",
+      },
+      {
+        name: "spiciness_scale",
+        type: "custom",
+      },
+    ].forEach(({ name, type }) => setError(name, { type }));
+
     const response: any = await submitToApi(data);
-    const tolog = await response.json();
+    const toLog = await response.json();
+    reset();
     if (response?.ok) {
+      console.log(toLog);
       setErrorHappened(false);
       setNotificationMessage("Successfully sent to API!");
       setshowNotification(true);
@@ -45,7 +90,7 @@ export const Form: React.FC = () => {
       return;
     }
     setErrorHappened(true);
-    setNotificationMessage(tolog.body[0] ?? errors?.name?.message);
+    setNotificationMessage(toLog);
     setshowNotification(true);
     setTimeout(() => {
       setshowNotification(false);
@@ -53,24 +98,24 @@ export const Form: React.FC = () => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <form
-        onSubmit={handleSubmit(async (data) => {
-          checkErrors(data);
-        })}
+    <div className="flex flex-col justify-center items-center align-center">
+      <motion.form
+        onSubmit={handleSubmit(sendForm)}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         className="p-10 px-14 rounded-xl shadow-lg shadow-black form-wrapper flex flex-col gap-4 justify-center align-center items-center bg-slate-800"
       >
+        {errors?.name && (
+          <p className="text-red-400 text-center">{errors?.name?.message}</p>
+        )}
         <TextField
           id="outlined-basic"
-          required
           label="Dish name"
           variant="outlined"
           {...register("name", {
-            required: true,
+            required: { value: true, message: "This field is required" },
+            minLength: { value: 3, message: "Min length is 3" },
             maxLength: { value: 30, message: "Max length is 30" },
           })}
           type="text"
@@ -78,14 +123,21 @@ export const Form: React.FC = () => {
           placeholder="Dish name"
           className="text-white"
         />
+        {errors?.preparation_time && (
+          <p className="text-red-400 text-center">
+            {errors?.preparation_time?.message}
+          </p>
+        )}
+        <InputLabel id="simple-select-outlined-label" className="mt-4">
+          Preparation time
+        </InputLabel>
         <TextField
           id="time"
           {...register("preparation_time", {
-            required: true,
+            required: { value: true, message: "This field is required" },
           })}
           type="time"
           variant="outlined"
-          required
           aria-label="Preparation time"
           placeholder="Preparation time"
           inputProps={{ step: 1 }}
@@ -111,15 +163,19 @@ export const Form: React.FC = () => {
             })}
           </Select>
         </FormControl>
-        <DishOptions register={register} chosenDish={currentDish} />
+        <DishOptions
+          register={register}
+          errors={errors}
+          chosenDish={currentDish}
+        />
         <Button type="submit" variant="contained" color="success">
           Submit
         </Button>
-      </form>
+      </motion.form>
       <AnimatePresence>
         {showNotification && (
           <motion.div
-            className="absolute top-16 bottom-auto"
+            className="fixed top-16 m-0 bottom-auto w-full flex justify-center align-center items-center content-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -129,12 +185,13 @@ export const Form: React.FC = () => {
               onClose={() => {
                 setshowNotification(false);
               }}
+              className="w-min"
             >
               {notificationMessage}
             </Alert>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 };
