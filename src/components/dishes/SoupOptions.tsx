@@ -1,9 +1,14 @@
-import React from "react";
 import { TextField } from "@mui/material";
+import { motion } from "framer-motion";
 
 const SoupOptions: React.FC<{ register: any }> = ({ register }) => {
   return (
-    <div className="flex flex-col gap-4">
+    <motion.div
+      className="flex flex-col gap-4"
+      initial={{ scaleY: 0 }}
+      animate={{ scaleY: 1 }}
+      exit={{ scaleY: 0 }}
+    >
       <TextField
         {...register("spiciness_scale", {
           required: true,
@@ -17,7 +22,7 @@ const SoupOptions: React.FC<{ register: any }> = ({ register }) => {
         aria-label="spiciness_scale"
         placeholder="Spiciness scale"
       />
-    </div>
+    </motion.div>
   );
 };
 

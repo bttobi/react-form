@@ -9,13 +9,20 @@ import {
   Button,
   Alert,
 } from "@mui/material";
+import { motion, AnimatePresence } from "framer-motion";
 import DishOptions from "./DishOptions";
 import submitToApi from "../functions/submitToApi";
 
 export const Form: React.FC = () => {
   const [currentDish, setcurrentDish] = useState<string | undefined>("pizza");
   const [showNotification, setshowNotification] = useState<boolean>(false);
-  const { register, handleSubmit } = useForm({
+  const [notificationMessage, setNotificationMessage] = useState<string>("");
+  const [errorHappened, setErrorHappened] = useState<boolean>(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       name: "",
       preparation_time: "00:00:00",
@@ -25,14 +32,35 @@ export const Form: React.FC = () => {
   });
   const options: string[] = ["pizza", "soup", "sandwich"];
 
+  const checkErrors = async (data: any): Promise<void> => {
+    const response: any = await submitToApi(data);
+    const tolog = await response.json();
+    if (response?.ok) {
+      setErrorHappened(false);
+      setNotificationMessage("Successfully sent to API!");
+      setshowNotification(true);
+      setTimeout(() => {
+        setshowNotification(false);
+      }, 3000);
+      return;
+    }
+    setErrorHappened(true);
+    setNotificationMessage(tolog.body[0] ?? errors?.name?.message);
+    setshowNotification(true);
+    setTimeout(() => {
+      setshowNotification(false);
+    }, 3000);
+  };
+
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <form
         onSubmit={handleSubmit(async (data) => {
-          setshowNotification(true);
-          const response: any = await submitToApi(data);
-          const tolog = await response.json();
-          console.log(tolog);
+          checkErrors(data);
         })}
         className="p-10 px-14 rounded-xl shadow-lg shadow-black form-wrapper flex flex-col gap-4 justify-center align-center items-center bg-slate-800"
       >
@@ -41,9 +69,12 @@ export const Form: React.FC = () => {
           required
           label="Dish name"
           variant="outlined"
-          {...register("name", { required: true, maxLength: 30 })}
+          {...register("name", {
+            required: true,
+            maxLength: { value: 30, message: "Max length is 30" },
+          })}
           type="text"
-          aria-label="name"
+          aria-label="Dish name"
           placeholder="Dish name"
           className="text-white"
         />
@@ -85,16 +116,25 @@ export const Form: React.FC = () => {
           Submit
         </Button>
       </form>
-      {showNotification && (
-        <Alert
-          className="absolute top-20 bottom-auto"
-          onClose={() => {
-            setshowNotification(false);
-          }}
-        >
-          This is a success alert — check it out!
-        </Alert>
-      )}
-    </>
+      <AnimatePresence>
+        {showNotification && (
+          <motion.div
+            className="absolute top-16 bottom-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <Alert
+              severity={errorHappened ? "error" : "success"}
+              onClose={() => {
+                setshowNotification(false);
+              }}
+            >
+              {notificationMessage}
+            </Alert>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };

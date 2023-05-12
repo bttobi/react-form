@@ -1,3 +1,4 @@
+import { motion, AnimatePresence } from "framer-motion";
 import PizzaOptions from "./dishes/PizzaOptions";
 import SoupOptions from "./dishes/SoupOptions";
 import SandwichOptions from "./dishes/SandwichOptions";
@@ -22,7 +23,11 @@ const DishOptions: React.FC<{
     }
   };
 
-  return <div className="flex flex-col gap-4">{chooseDish()}</div>;
+  return (
+    <AnimatePresence>
+      <motion.div className="flex flex-col gap-4">{chooseDish()}</motion.div>
+    </AnimatePresence>
+  );
 };
 
 export default DishOptions;
