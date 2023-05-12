@@ -180,15 +180,16 @@ export const Form: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <Alert
-              severity={errorHappened ? "error" : "success"}
-              onClose={() => {
+            <div
+              onClick={() => {
                 setshowNotification(false);
               }}
-              className="w-min"
+              className={`w-min ${
+                errorHappened ? "bg-red-800" : "bg-green-800"
+              } rounded-lg p-4 cursor-pointer`}
             >
               {notificationMessage}
-            </Alert>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
