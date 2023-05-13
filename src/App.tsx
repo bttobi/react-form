@@ -14,7 +14,7 @@ const App: React.FC = () => {
       <CssBaseline />
       <main
         id="App"
-        className="flex flex-col justify-center align-center items-center text-xl"
+        className="m-0 flex flex-col justify-center align-center items-center text-xl"
       >
         <Form />
       </main>
