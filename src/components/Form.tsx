@@ -8,6 +8,7 @@ import {
   MenuItem,
   Button,
 } from "@mui/material";
+import TailSpin from "react-loading-icons/dist/esm/components/tail-spin";
 import { motion, AnimatePresence } from "framer-motion";
 import DishOptions from "./DishOptions";
 import submitToApi from "../functions/submitToApi";
@@ -25,6 +26,7 @@ export type FormInputs = {
 
 export const Form: React.FC = () => {
   const [currentDish, setCurrentDish] = useState<string | undefined>("pizza");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showNotification, setshowNotification] = useState<boolean>(false);
   const [notificationMessage, setNotificationMessage] = useState<string>("");
   const [errorHappened, setErrorHappened] = useState<boolean>(false);
@@ -49,6 +51,12 @@ export const Form: React.FC = () => {
     //@ts-ignore
     errorTypes.forEach(({ name, type }) => setError(name, { type }));
 
+    if (Object.keys(errors).length != 0) {
+      setIsLoading(false);
+      return;
+    }
+    setIsLoading(true);
+
     const response: any = await submitToApi(data);
     const toLog = await response.json();
     reset();
@@ -56,6 +64,7 @@ export const Form: React.FC = () => {
       const parsedResponse = JSON.stringify(toLog, null, "\n");
       setApiResponse(parsedResponse);
       setErrorHappened(false);
+      setIsLoading(false);
       setNotificationMessage("Successfully sent to API!");
       setshowNotification(true);
       setTimeout(() => {
@@ -64,6 +73,7 @@ export const Form: React.FC = () => {
       return;
     }
     setErrorHappened(true);
+    setIsLoading(false);
     setNotificationMessage(toLog.body[0]);
     setshowNotification(true);
     setTimeout(() => {
@@ -180,8 +190,13 @@ export const Form: React.FC = () => {
           errors={errors}
           chosenDish={currentDish}
         />
-        <Button type="submit" variant="contained" color="success">
-          Submit
+        <Button
+          type="submit"
+          variant="contained"
+          color="success"
+          className="h-12 w-32"
+        >
+          {isLoading ? <TailSpin width={"32px"} /> : "Submit"}
         </Button>
       </motion.form>
       <AnimatePresence>
