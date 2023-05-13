@@ -67,6 +67,11 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
               valueAsNumber: true,
               min: { value: 1.0, message: "Must be greater than 1" },
               max: { value: 60.0, message: "Must be smaller than 60" },
+              validate: {
+                num: (val: any) =>
+                  val?.toString()?.split(".")[1]?.length <= 2 ||
+                  "Only 2 decimal points allowed",
+              },
             })}
             type="number"
             variant="outlined"
