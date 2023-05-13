@@ -33,11 +33,18 @@ const SandwichOptions: React.FC<{ register: any; errors: any }> = ({
               valueAsNumber: true,
               min: { value: 1, message: "Value must be between 1 and 6" },
               max: { value: 6, message: "Value must be between 1 and 6" },
+              validate: {
+                whole: (val: any) =>
+                  parseInt(val) === val || "Must be a whole number",
+              },
             })}
             type="number"
             variant="outlined"
             aria-label="slices_of_bread"
             placeholder="Slices of bread *"
+            inputProps={{
+              step: "any",
+            }}
             className="overflow-hidden"
           />
         </div>

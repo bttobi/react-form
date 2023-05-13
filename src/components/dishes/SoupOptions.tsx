@@ -31,11 +31,18 @@ const SoupOptions: React.FC<{ register: any; errors: any }> = ({
               valueAsNumber: true,
               min: { value: 1, message: "Value must be between 1 and 10" },
               max: { value: 10, message: "Value must be between 1 and 10" },
+              validate: {
+                whole: (val: any) =>
+                  parseInt(val) === val || "Must be a whole number",
+              },
             })}
             type="number"
             variant="outlined"
             aria-label="spiciness_scale"
             placeholder="Spiciness scale *"
+            inputProps={{
+              step: "any",
+            }}
           />
         </div>
       </motion.div>

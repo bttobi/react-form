@@ -33,11 +33,18 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
               valueAsNumber: true,
               min: { value: 1, message: "Value must be between 1 and 12" },
               max: { value: 12, message: "Value must be between 1 and 12" },
+              validate: {
+                whole: (val: any) =>
+                  parseInt(val) === val || "Must be a whole number",
+              },
             })}
             type="number"
             variant="outlined"
             aria-label="no_of_slices"
             placeholder="Number of slices *"
+            inputProps={{
+              step: "any",
+            }}
           />
         </div>
         <div className="w-full h-full relative py-2 flex flex-col justify-center items-center">
@@ -58,15 +65,17 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
               required: { value: true, message: "This field is required" },
               shouldUnregister: true,
               valueAsNumber: true,
-              min: { value: 1, message: "Must be greater than 1" },
-              max: { value: 60, message: "Must be smaller than 60" },
+              min: { value: 1.0, message: "Must be greater than 1" },
+              max: { value: 60.0, message: "Must be smaller than 60" },
             })}
             type="number"
             variant="outlined"
             aria-label="diameter"
             placeholder="Diameter of the pizza *"
-            step="any"
             className="overflow-hidden"
+            inputProps={{
+              step: "any",
+            }}
           />
         </div>
       </motion.div>
