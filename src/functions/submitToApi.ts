@@ -1,4 +1,6 @@
-const submitToApi = async (data: any) => {
+import { FormInputs } from "../components/Form";
+
+const submitToApi = async (data: FormInputs) => {
   try {
     const result = await fetch(
       "https://umzzcc503l.execute-api.us-west-2.amazonaws.com/dishes/",
