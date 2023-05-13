@@ -7,13 +7,13 @@ import {
   InputLabel,
   MenuItem,
   Button,
-  Alert,
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import DishOptions from "./DishOptions";
 import submitToApi from "../functions/submitToApi";
+import errorTypes from "../data/errorTypes";
 
-type FormInputs = {
+export type FormInputs = {
   name: string;
   preparation_time: string;
   type: string;
@@ -24,10 +24,11 @@ type FormInputs = {
 };
 
 export const Form: React.FC = () => {
-  const [currentDish, setcurrentDish] = useState<string | undefined>("pizza");
+  const [currentDish, setCurrentDish] = useState<string | undefined>("pizza");
   const [showNotification, setshowNotification] = useState<boolean>(false);
   const [notificationMessage, setNotificationMessage] = useState<string>("");
   const [errorHappened, setErrorHappened] = useState<boolean>(false);
+  const [apiResponse, setApiResponse] = useState<string>("");
   const {
     register,
     handleSubmit,
@@ -37,7 +38,7 @@ export const Form: React.FC = () => {
   } = useForm<FormInputs>({
     defaultValues: {
       name: "",
-      preparation_time: "00:00:00",
+      preparation_time: "00:01:00",
       type: "pizza",
     },
     shouldUnregister: true,
@@ -45,42 +46,15 @@ export const Form: React.FC = () => {
   const options: string[] = ["pizza", "soup", "sandwich"];
 
   const sendForm = async (data: FormInputs): Promise<void> => {
-    [
-      {
-        name: "name",
-        type: "custom",
-      },
-      {
-        name: "preparation_time",
-        type: "focus",
-      },
-      {
-        name: "preparation_time",
-        type: "custom",
-      },
-      {
-        name: "no_of_slices",
-        type: "custom",
-      },
-      {
-        name: "diameter",
-        type: "custom",
-      },
-      {
-        name: "slices_of_bread",
-        type: "custom",
-      },
-      {
-        name: "spiciness_scale",
-        type: "custom",
-      },
-    ].forEach(({ name, type }) => setError(name, { type }));
+    //@ts-ignore
+    errorTypes.forEach(({ name, type }) => setError(name, { type }));
 
     const response: any = await submitToApi(data);
     const toLog = await response.json();
     reset();
     if (response?.ok) {
-      console.log(toLog);
+      const parsedResponse = JSON.stringify(toLog, null, "\n");
+      setApiResponse(parsedResponse);
       setErrorHappened(false);
       setNotificationMessage("Successfully sent to API!");
       setshowNotification(true);
@@ -90,7 +64,7 @@ export const Form: React.FC = () => {
       return;
     }
     setErrorHappened(true);
-    setNotificationMessage(toLog);
+    setNotificationMessage(toLog.body[0]);
     setshowNotification(true);
     setTimeout(() => {
       setshowNotification(false);
@@ -98,71 +72,109 @@ export const Form: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center align-center">
+    <div className="flex flex-col justify-center items-center align-center my-16 m-0">
       <motion.form
         onSubmit={handleSubmit(sendForm)}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="p-10 px-14 rounded-xl shadow-lg shadow-black form-wrapper flex flex-col gap-4 justify-center align-center items-center bg-slate-800"
+        className="p-10 px-10 rounded-xl shadow-lg shadow-black form-wrapper flex flex-col gap-4 justify-center align-center items-center bg-slate-800"
       >
-        {errors?.name && (
-          <p className="text-red-400 text-center">{errors?.name?.message}</p>
-        )}
-        <TextField
-          id="outlined-basic"
-          label="Dish name"
-          variant="outlined"
-          {...register("name", {
-            required: { value: true, message: "This field is required" },
-            minLength: { value: 3, message: "Min length is 3" },
-            maxLength: { value: 30, message: "Max length is 30" },
-          })}
-          type="text"
-          aria-label="Dish name"
-          placeholder="Dish name"
-          className="text-white"
-        />
-        {errors?.preparation_time && (
-          <p className="text-red-400 text-center">
-            {errors?.preparation_time?.message}
-          </p>
-        )}
-        <InputLabel id="simple-select-outlined-label" className="mt-4">
-          Preparation time
-        </InputLabel>
-        <TextField
-          id="time"
-          {...register("preparation_time", {
-            required: { value: true, message: "This field is required" },
-          })}
-          type="time"
-          variant="outlined"
-          aria-label="Preparation time"
-          placeholder="Preparation time"
-          inputProps={{ step: 1 }}
-        />
-        <FormControl variant="outlined" sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel id="simple-select-outlined-label">Dish type</InputLabel>
-          <Select
-            labelId="simple-select-outlined-label"
-            id="simple-select-outlined"
-            label="Dish type"
-            value={currentDish}
-            {...register("type")}
-            onChange={(e: any) => setcurrentDish(e.target.value)}
-            name="type"
-            className="text-white"
-          >
-            {options.map((val) => {
-              return (
-                <MenuItem key={val} value={val}>
-                  {val}
-                </MenuItem>
-              );
+        <div className="w-full h-full relative px-1 py-2 flex flex-col justify-center items-center">
+          <AnimatePresence>
+            {errors?.name && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="h-min z-10 right-auto left-auto top-auto bottom-0 bg-slate-800 px-1 absolute text-sm text-red-400"
+              >
+                {errors?.name?.message}
+              </motion.p>
+            )}
+          </AnimatePresence>
+          <TextField
+            id="outlined-basic"
+            label="Dish name *"
+            variant="outlined"
+            {...register("name", {
+              required: { value: true, message: "This field is required" },
+              minLength: {
+                value: 3,
+                message: "Length must be between 3 and 30",
+              },
+              maxLength: {
+                value: 30,
+                message: "Length must be between 3 and 30",
+              },
+              pattern: {
+                value: /^[A-Za-z]+$/i,
+                message: "Only letters allowed",
+              },
             })}
-          </Select>
-        </FormControl>
+            type="text"
+            aria-label="Dish name"
+            placeholder="Dish name"
+            className="text-white"
+          />
+        </div>
+        <div className="w-full h-full relative py-2 flex flex-col justify-center items-center">
+          <AnimatePresence>
+            {errors?.preparation_time && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="h-min z-10 right-auto left-auto top-auto bottom-0 bg-slate-800 px-1 absolute text-sm text-red-400"
+              >
+                {errors?.preparation_time?.message}
+              </motion.p>
+            )}
+          </AnimatePresence>
+          <InputLabel id="simple-select-outlined-label">
+            Preparation time *
+          </InputLabel>
+          <TextField
+            id="time"
+            {...register("preparation_time", {
+              required: { value: true, message: "This field is required" },
+              min: {
+                value: "00:01:00",
+                message: "Min value is 00:01:00",
+              },
+            })}
+            type="time"
+            variant="outlined"
+            aria-label="Preparation time"
+            placeholder="Preparation time"
+            inputProps={{ step: 1 }}
+          />
+        </div>
+        <div className="w-full h-full relative py-2 flex flex-col justify-center items-center">
+          <FormControl variant="outlined" sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id="simple-select-outlined-label">
+              Dish type *
+            </InputLabel>
+            <Select
+              labelId="simple-select-outlined-label"
+              id="simple-select-outlined"
+              label="Dish type"
+              value={currentDish}
+              {...register("type")}
+              onChange={(e: any) => setCurrentDish(e.target.value)}
+              name="type"
+              className="text-white"
+            >
+              {options.map((val) => {
+                return (
+                  <MenuItem key={val} value={val}>
+                    {val}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </div>
         <DishOptions
           register={register}
           errors={errors}
@@ -175,7 +187,7 @@ export const Form: React.FC = () => {
       <AnimatePresence>
         {showNotification && (
           <motion.div
-            className="fixed top-16 m-0 bottom-auto w-full flex justify-center align-center items-center content-center"
+            className="fixed z-20 top-16 m-0 bottom-auto w-full flex justify-center align-center items-center content-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -184,12 +196,29 @@ export const Form: React.FC = () => {
               onClick={() => {
                 setshowNotification(false);
               }}
-              className={`w-min ${
+              className={`${
                 errorHappened ? "bg-red-800" : "bg-green-800"
-              } rounded-lg p-4 cursor-pointer`}
+              } rounded-lg p-4 cursor-pointer text-center shadow-lg shadow-black`}
             >
-              {notificationMessage}
+              <span>
+                {errorHappened ? (
+                  <strong> ❌ ERROR - </strong>
+                ) : (
+                  <strong> ✅ SUCCESS - </strong>
+                )}
+                {notificationMessage}
+              </span>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {apiResponse != "" && (
+          <motion.div className="text-center mx-24 flex flex-col flex-wrap p-4 bg-slate-800 rounded-lg mt-8 shadow-lg shadow-black">
+            <strong className="text-orange-300">
+              Last successful API Response:
+            </strong>
+            {apiResponse}
           </motion.div>
         )}
       </AnimatePresence>
