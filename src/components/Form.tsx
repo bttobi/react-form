@@ -187,7 +187,7 @@ export const Form: React.FC = () => {
       <AnimatePresence>
         {showNotification && (
           <motion.div
-            className="fixed z-20 top-16 m-0 bottom-auto w-full flex justify-center align-center items-center content-center"
+            className="fixed z-20 top-6 m-0 bottom-auto w-full flex justify-center align-center items-center content-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -214,7 +214,12 @@ export const Form: React.FC = () => {
       </AnimatePresence>
       <AnimatePresence>
         {apiResponse != "" && (
-          <motion.div className="text-center mx-24 flex flex-col flex-wrap p-4 bg-slate-800 rounded-lg mt-8 shadow-lg shadow-black">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="text-center mx-24 flex flex-col flex-wrap p-4 bg-slate-800 rounded-lg mt-8 shadow-lg shadow-black"
+          >
             <strong className="text-orange-300">
               Last successful API Response:
             </strong>

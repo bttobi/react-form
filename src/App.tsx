@@ -12,10 +12,7 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <main
-        id="App"
-        className="m-0 flex flex-col justify-center align-center items-center text-xl"
-      >
+      <main id="App" className="">
         <Form />
       </main>
     </ThemeProvider>
