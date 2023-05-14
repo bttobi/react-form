@@ -72,7 +72,7 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
                   return (
                     Number.isInteger(val) ||
                     val.toString().split(".")[1]?.length <= 2 ||
-                    "Only 2 decimal points allowed"
+                    "Max 2 decimal places allowed"
                   );
                 },
               },
