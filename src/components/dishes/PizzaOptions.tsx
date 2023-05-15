@@ -20,7 +20,7 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="h-min z-10 left-4 top-auto bottom-0 bg-slate-800 px-1 absolute text-sm text-red-400"
+                className="h-min z-10 left-4 top-auto bottom-0 absolute text-sm text-red-400"
               >
                 {errors?.no_of_slices?.message}
               </motion.p>
