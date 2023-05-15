@@ -94,7 +94,7 @@ export const Form: React.FC = () => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="p-4 rounded-xl shadow-lg shadow-black form-wrapper flex flex-col gap-4 justify-center align-center items-center bg-slate-800"
-        noValidate
+        novalidate
       >
         <div className="w-full h-full relative px-1 py-2 flex flex-col justify-center items-center">
           <AnimatePresence>
