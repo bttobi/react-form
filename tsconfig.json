@@ -23,7 +23,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*", "jest.config.js", "tests.test.ts"],
+  "include": ["src/**/*", "jest.config.ts", "tests.test.ts"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "exclude": ["node_modules", "dist"]
 }
