@@ -39,7 +39,8 @@ const SandwichOptions: React.FC<{ register: any; errors: any }> = ({
                 Number(slicesVal == "" ? 0 : slicesVal) + 1,
                 "1",
                 "6",
-                setSlicesVal
+                setSlicesVal,
+                false
               )
             }
           >
@@ -62,7 +63,7 @@ const SandwichOptions: React.FC<{ register: any; errors: any }> = ({
               value: `${slicesVal}`,
             }}
             onChange={(e) =>
-              setBetween(e.currentTarget.value, "", "6", setSlicesVal)
+              setBetween(e.currentTarget.value, "", "6", setSlicesVal, false)
             }
             className="overflow-hidden"
           />
@@ -72,7 +73,8 @@ const SandwichOptions: React.FC<{ register: any; errors: any }> = ({
                 Number(slicesVal == "" ? 0 : slicesVal) - 1,
                 "1",
                 "6",
-                setSlicesVal
+                setSlicesVal,
+                false
               )
             }
           >

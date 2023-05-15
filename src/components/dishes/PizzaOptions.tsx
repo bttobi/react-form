@@ -40,7 +40,8 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
                 Number(slicesVal == "" ? 0 : slicesVal) + 1,
                 "1",
                 "12",
-                setSlicesVal
+                setSlicesVal,
+                false
               );
             }}
           >
@@ -53,10 +54,6 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
               valueAsNumber: true,
               min: { value: 1, message: "Value must be between 1 and 12" },
               max: { value: 12, message: "Value must be between 1 and 12" },
-              validate: {
-                isNumber: (val: any) =>
-                  parseInt(val) == val || "Input a number",
-              },
             })}
             type="number"
             variant="outlined"
@@ -67,7 +64,7 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
               value: `${slicesVal}`,
             }}
             onChange={(e) => {
-              setBetween(e.currentTarget.value, "", "12", setSlicesVal);
+              setBetween(e.currentTarget.value, "", "12", setSlicesVal, false);
             }}
           />
           <IconButton
@@ -76,7 +73,8 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
                 Number(slicesVal == "" ? 0 : slicesVal) - 1,
                 "1",
                 "12",
-                setSlicesVal
+                setSlicesVal,
+                false
               )
             }
           >
@@ -105,7 +103,8 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
                 Number(diameterVal == "" ? 0 : diameterVal) + 10,
                 "1",
                 "60",
-                setDiameterVal
+                setDiameterVal,
+                true
               )
             }
           >
@@ -133,11 +132,11 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
             aria-label="pizza diameter"
             className="overflow-hidden"
             inputProps={{
-              step: "any",
+              step: "0.01",
               value: `${diameterVal}`,
             }}
             onChange={(e) => {
-              setBetween(e.currentTarget.value, "", "12", setDiameterVal);
+              setBetween(e.currentTarget.value, "", "12", setDiameterVal, true);
             }}
           />
           <IconButton
@@ -146,7 +145,8 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
                 Number(diameterVal == "" ? 0 : diameterVal) - 1,
                 "1",
                 "60",
-                setDiameterVal
+                setDiameterVal,
+                true
               )
             }
           >

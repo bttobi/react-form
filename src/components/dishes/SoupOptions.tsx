@@ -37,7 +37,8 @@ const SoupOptions: React.FC<{ register: any; errors: any }> = ({
                 Number(spicinessVal == "" ? 0 : spicinessVal) + 1,
                 "1",
                 "10",
-                setSpicinessVal
+                setSpicinessVal,
+                false
               )
             }
           >
@@ -60,7 +61,13 @@ const SoupOptions: React.FC<{ register: any; errors: any }> = ({
               value: `${spicinessVal}`,
             }}
             onChange={(e) =>
-              setBetween(e.currentTarget.value, "", "10", setSpicinessVal)
+              setBetween(
+                e.currentTarget.value,
+                "",
+                "10",
+                setSpicinessVal,
+                false
+              )
             }
           />
           <IconButton
@@ -69,7 +76,8 @@ const SoupOptions: React.FC<{ register: any; errors: any }> = ({
                 Number(spicinessVal == "" ? 0 : spicinessVal) - 1,
                 "1",
                 "10",
-                setSpicinessVal
+                setSpicinessVal,
+                false
               )
             }
           >

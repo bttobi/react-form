@@ -2,8 +2,13 @@ const setBetween = (
   value: string | number,
   min: string,
   max: string,
-  setter: React.Dispatch<React.SetStateAction<string>>
+  setter: React.Dispatch<React.SetStateAction<string>>,
+  isFloat: boolean
 ) => {
+  if (isFloat) {
+    setter(value.toString());
+    return;
+  }
   if (
     value.toString().includes("e") ||
     value.toString().includes(".") ||
