@@ -1,4 +1,4 @@
-import { TextField, InputLabel } from "@mui/material";
+import { TextField } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 
 const SandwichOptions: React.FC<{ register: any; errors: any }> = ({
@@ -13,23 +13,22 @@ const SandwichOptions: React.FC<{ register: any; errors: any }> = ({
         animate={{ scaleY: 1 }}
         exit={{ scaleY: 0 }}
       >
-        <InputLabel id="simple-select-outlined-label">
-          Bread slices 🍞 (1-6) *
-        </InputLabel>
-        <div className="w-full h-full relative py-2 flex flex-row justify-center items-center">
+        <div className="w-full h-full relative pb-5 flex flex-row justify-center items-center">
           <AnimatePresence>
             {errors?.slices_of_bread && (
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="h-min z-10 right-auto left-auto top-auto bottom-0 bg-slate-800 px-1 absolute text-sm text-red-400"
+                className="h-min z-10 left-4 top-auto bottom-0 absolute text-sm text-red-400"
               >
                 {errors?.slices_of_bread?.message}
               </motion.p>
             )}
           </AnimatePresence>
           <TextField
+            label=" Bread slices 🍞 (1-6) *"
+            InputLabelProps={{ shrink: true }}
             {...register("slices_of_bread", {
               required: { value: true, message: "This field is required" },
               shouldUnregister: true,
@@ -51,7 +50,7 @@ const SandwichOptions: React.FC<{ register: any; errors: any }> = ({
               min: 1,
               max: 6,
             }}
-            className="w-32"
+            className="w-full"
           />
         </div>
       </motion.div>

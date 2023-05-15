@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import DishOptions from "./DishOptions";
 import submitToApi from "../functions/submitToApi";
 import errorTypes from "../data/errorTypes";
+import Alert from "./Notifications/Alert";
 
 export type FormInputs = {
   name: string;
@@ -51,6 +52,8 @@ export const Form: React.FC = () => {
     //@ts-ignore
     errorTypes.forEach(({ name, type }) => setError(name, { type }));
 
+    /*checking if errors object is not empty - that means errors happened
+    and loading animation should not be triggered*/
     if (Object.keys(errors).length != 0) {
       setIsLoading(false);
       return;
@@ -59,7 +62,8 @@ export const Form: React.FC = () => {
 
     const response: any = await submitToApi(data);
     const toLog = await response.json();
-    reset();
+    reset(); //resetting form after submitting
+
     if (response.ok) {
       const parsedResponse = JSON.stringify(toLog, null, "\n");
       setApiResponse(parsedResponse);
@@ -77,7 +81,6 @@ export const Form: React.FC = () => {
     }
     setErrorHappened(true);
     setIsLoading(false);
-    console.log(response);
     setNotificationMessage(` code: ${response.status} - ${toLog.body[0]}`);
     setshowNotification(true);
     setIsLoading(false);
@@ -96,22 +99,22 @@ export const Form: React.FC = () => {
         className="p-4 rounded-xl shadow-lg shadow-black form-wrapper flex flex-col gap-4 justify-center align-center items-center bg-slate-800"
         noValidate
       >
-        <div className="w-full h-full relative px-1 py-2 flex flex-col justify-center items-center">
+        <div className="w-full h-full relative pt-2 pb-5 mx-4 flex flex-col justify-center items-center">
           <AnimatePresence>
             {errors?.name && (
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="h-min z-10 right-auto left-auto top-auto bottom-0 bg-slate-800 px-1 absolute text-sm text-red-400"
+                className="h-min z-10 left-4 bottom-0 absolute text-sm text-red-400"
               >
                 {errors?.name?.message}
               </motion.p>
             )}
           </AnimatePresence>
           <TextField
-            id="outlined-basic"
             label="Dish name *"
+            InputLabelProps={{ shrink: true }}
             variant="outlined"
             {...register("name", {
               required: { value: true, message: "This field is required" },
@@ -130,28 +133,25 @@ export const Form: React.FC = () => {
             })}
             type="text"
             aria-label="Dish name"
-            placeholder="Dish name"
-            className="text-white"
+            className="text-white w-full px-0"
           />
         </div>
-        <div className="w-full h-full relative py-2 flex flex-col justify-center items-center">
+        <div className="w-full h-full relative pb-5 flex flex-col justify-center items-center">
           <AnimatePresence>
             {errors?.preparation_time && (
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="h-min z-10 right-auto left-auto top-auto bottom-0 bg-slate-800 px-1 absolute text-sm text-red-400"
+                className="h-min z-10 left-4 top-auto bottom-0 absolute text-sm text-red-400"
               >
                 {errors?.preparation_time?.message}
               </motion.p>
             )}
           </AnimatePresence>
-          <InputLabel id="simple-select-outlined-label">
-            Preparation time *
-          </InputLabel>
           <TextField
-            id="time"
+            label="Preparation time ⏰ *"
+            InputLabelProps={{ shrink: true }}
             {...register("preparation_time", {
               required: { value: true, message: "This field is required" },
               min: {
@@ -164,22 +164,21 @@ export const Form: React.FC = () => {
             aria-label="Preparation time"
             placeholder="Preparation time"
             inputProps={{ step: 1 }}
+            className="w-full text-center"
           />
         </div>
-        <div className="w-full h-full relative py-2 flex flex-col justify-center items-center">
-          <FormControl variant="outlined" sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel id="simple-select-outlined-label">
-              Dish type *
-            </InputLabel>
+        <div className="w-full h-full relative pb-5 flex flex-col justify-center items-center">
+          <FormControl variant="outlined" sx={{ minWidth: "100%" }}>
+            <InputLabel id="dish_type">Dish type *</InputLabel>
             <Select
-              labelId="simple-select-outlined-label"
+              labelId="dish_type"
               id="simple-select-outlined"
               label="Dish type"
               value={currentDish}
               {...register("type")}
               onChange={(e: any) => setCurrentDish(e.target.value)}
               name="type"
-              className="text-white"
+              className="text-white w-full"
             >
               {options.map((val) => {
                 return (
@@ -200,39 +199,17 @@ export const Form: React.FC = () => {
           type="submit"
           variant="contained"
           color="success"
-          className="h-12 w-32"
+          className="h-12 w-full"
         >
           {isLoading ? <TailSpin width={"32px"} /> : "Submit"}
         </Button>
       </motion.form>
-      <AnimatePresence>
-        {showNotification && (
-          <motion.div
-            className="fixed z-20 top-6 m-0 bottom-auto w-full flex justify-center align-center items-center content-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <div
-              onClick={() => {
-                setshowNotification(false);
-              }}
-              className={`${
-                errorHappened ? "bg-red-800" : "bg-green-800"
-              } rounded-lg p-4 cursor-pointer text-center shadow-lg shadow-black`}
-            >
-              <span>
-                {errorHappened ? (
-                  <strong> ❌ ERROR - </strong>
-                ) : (
-                  <strong> ✅ SUCCESS - </strong>
-                )}
-                {notificationMessage}
-              </span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Alert
+        showNotification={showNotification}
+        errorHappened={errorHappened}
+        setshowNotification={setshowNotification}
+        notificationMessage={notificationMessage}
+      />
       <AnimatePresence>
         {apiResponse != "" && (
           <motion.div

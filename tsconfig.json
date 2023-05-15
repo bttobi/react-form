@@ -4,6 +4,10 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "paths": {
+      "test-utils": ["./utils/test-utils"]
+    },
+    "baseUrl": "src",
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -19,6 +23,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src/**/*", "jest.config.js", "tests.test.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }],
+  "exclude": ["node_modules", "dist"]
 }

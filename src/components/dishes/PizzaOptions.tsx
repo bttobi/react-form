@@ -1,4 +1,4 @@
-import { InputLabel, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 
 const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
@@ -8,28 +8,27 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
   return (
     <AnimatePresence>
       <motion.div
-        className="w-full pizza-options flex flex-col justify-center items-center"
+        className="w-full pizza-options flex flex-col justify-center items-center gap-4"
         initial={{ scaleY: 0 }}
         animate={{ scaleY: 1 }}
         exit={{ scaleY: 0 }}
       >
-        <InputLabel id="simple-select-outlined-label">
-          Pizza slices 🍕 (1-12) *
-        </InputLabel>
-        <div className="w-full h-full relative py-2 flex flex-row justify-center items-center">
+        <div className="w-full h-full relative pb-5 flex flex-row justify-center items-center">
           <AnimatePresence>
             {errors?.no_of_slices && (
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="h-min z-10 right-auto left-auto top-auto bottom-0 bg-slate-800 px-1 absolute text-sm text-red-400"
+                className="h-min z-10 left-4 top-auto bottom-0 bg-slate-800 px-1 absolute text-sm text-red-400"
               >
                 {errors?.no_of_slices?.message}
               </motion.p>
             )}
           </AnimatePresence>
           <TextField
+            label="Pizza slices 🍕 (1-12) *"
+            InputLabelProps={{ shrink: true }}
             {...register("no_of_slices", {
               required: { value: true, message: "This field is required" },
               shouldUnregister: true,
@@ -51,26 +50,25 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
               max: 12,
               defaultValue: 1,
             }}
-            className="w-32"
+            className="w-full"
           />
         </div>
-        <InputLabel id="simple-select-outlined-label" className="mt-6">
-          Diameter of pizza 📐 (1-60) *
-        </InputLabel>
-        <div className="w-full h-full relative py-2 flex flex-row justify-center items-center">
+        <div className="w-full h-full pb-5 relative flex flex-row justify-center items-center">
           <AnimatePresence>
             {errors?.diameter && (
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="h-min text-center z-10 right-auto left-auto top-auto bottom-0 bg-slate-800 px-1 absolute text-sm text-red-400"
+                className="h-min text-center z-10 left-4 top-auto bottom-0 absolute text-sm text-red-400"
               >
                 {errors?.diameter?.message}
               </motion.p>
             )}
           </AnimatePresence>
           <TextField
+            label="Diameter of pizza 📐 (1-60) "
+            InputLabelProps={{ shrink: true }}
             {...register("diameter", {
               required: { value: true, message: "This field is required" },
               shouldUnregister: true,
@@ -97,7 +95,7 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
               max: 60.0,
               defaultValue: 1.0,
             }}
-            className="w-32"
+            className="w-full"
           />
         </div>
       </motion.div>

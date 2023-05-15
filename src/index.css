@@ -16,3 +16,7 @@ body,
 input[type="number"]::-webkit-inner-spin-button {
   cursor: pointer;
 }
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  display: none;
+}

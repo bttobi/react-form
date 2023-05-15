@@ -1,4 +1,4 @@
-import { TextField, InputLabel } from "@mui/material";
+import { TextField } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 
 const SoupOptions: React.FC<{ register: any; errors: any }> = ({
@@ -13,21 +13,20 @@ const SoupOptions: React.FC<{ register: any; errors: any }> = ({
         animate={{ scaleY: 1 }}
         exit={{ scaleY: 0 }}
       >
-        <InputLabel id="simple-select-outlined-label">
-          Soup spiciness 🌶️ (1-10) *
-        </InputLabel>
-        <div className="w-full h-full relative py-2 flex flex-row justify-center items-center">
+        <div className="w-full h-full relative pb-5 flex flex-row justify-center items-center">
           {errors?.spiciness_scale && (
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="h-min z-10 right-auto left-auto top-auto bottom-0 bg-slate-800 px-1 absolute text-sm text-red-400"
+              className="h-min z-10 left-4 top-auto bottom-0 absolute text-sm text-red-400"
             >
               {errors?.spiciness_scale?.message}
             </motion.p>
           )}
           <TextField
+            label=" Soup spiciness 🌶️ (1-10) *"
+            InputLabelProps={{ shrink: true }}
             {...register("spiciness_scale", {
               required: { value: true, message: "This field is required" },
               shouldUnregister: true,
@@ -49,7 +48,7 @@ const SoupOptions: React.FC<{ register: any; errors: any }> = ({
               min: 1,
               max: 10,
             }}
-            className="w-32"
+            className="w-full"
           />
         </div>
       </motion.div>
