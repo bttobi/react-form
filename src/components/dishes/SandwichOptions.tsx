@@ -1,18 +1,14 @@
-import { useState } from "react";
-import { TextField, InputLabel, IconButton } from "@mui/material";
+import { TextField, InputLabel } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-import { IoIosAddCircle, IoIosRemoveCircle } from "react-icons/io";
-import setBetween from "../../functions/setBetween";
 
 const SandwichOptions: React.FC<{ register: any; errors: any }> = ({
   register,
   errors,
 }) => {
-  const [slicesVal, setSlicesVal] = useState<string>("1");
   return (
     <AnimatePresence>
       <motion.div
-        className="flex flex-col justify-center items-center"
+        className="w-full flex flex-col justify-center items-center"
         initial={{ scaleY: 0 }}
         animate={{ scaleY: 1 }}
         exit={{ scaleY: 0 }}
@@ -33,19 +29,6 @@ const SandwichOptions: React.FC<{ register: any; errors: any }> = ({
               </motion.p>
             )}
           </AnimatePresence>
-          <IconButton
-            onClick={() =>
-              setBetween(
-                Number(slicesVal == "" ? 0 : slicesVal) + 1,
-                "1",
-                "6",
-                setSlicesVal,
-                false
-              )
-            }
-          >
-            <IoIosAddCircle />
-          </IconButton>
           <TextField
             {...register("slices_of_bread", {
               required: { value: true, message: "This field is required" },
@@ -53,33 +36,23 @@ const SandwichOptions: React.FC<{ register: any; errors: any }> = ({
               valueAsNumber: true,
               min: { value: 1, message: "Value must be between 1 and 6" },
               max: { value: 6, message: "Value must be between 1 and 6" },
+              validate: {
+                decimal: (val: any) =>
+                  parseInt(val) == val || "Must be a whole number",
+              },
             })}
             type="number"
             variant="outlined"
             aria-label="slices of bread"
             inputProps={{
-              step: "any",
+              step: "1",
               inputMode: "numeric",
-              value: `${slicesVal}`,
+              defaultValue: 1,
+              min: 1,
+              max: 6,
             }}
-            onChange={(e) =>
-              setBetween(e.currentTarget.value, "", "6", setSlicesVal, false)
-            }
-            className="overflow-hidden"
+            className="w-32"
           />
-          <IconButton
-            onClick={() =>
-              setBetween(
-                Number(slicesVal == "" ? 0 : slicesVal) - 1,
-                "1",
-                "6",
-                setSlicesVal,
-                false
-              )
-            }
-          >
-            <IoIosRemoveCircle />
-          </IconButton>
         </div>
       </motion.div>
     </AnimatePresence>

@@ -34,7 +34,9 @@ const DishOptions: React.FC<{
 
   return (
     <AnimatePresence>
-      <motion.div className="flex flex-col gap-4">{chooseDish()}</motion.div>
+      <motion.div className="w-full flex flex-col gap-4 mb-6">
+        {chooseDish()}
+      </motion.div>
     </AnimatePresence>
   );
 };

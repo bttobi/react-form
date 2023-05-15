@@ -1,19 +1,14 @@
-import { useState } from "react";
-import { InputLabel, TextField, IconButton } from "@mui/material";
+import { InputLabel, TextField } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-import { IoIosAddCircle, IoIosRemoveCircle } from "react-icons/io";
-import setBetween from "../../functions/setBetween";
 
 const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
   register,
   errors,
 }) => {
-  const [slicesVal, setSlicesVal] = useState<string>("1");
-  const [diameterVal, setDiameterVal] = useState<string>("10");
   return (
     <AnimatePresence>
       <motion.div
-        className="pizza-options flex flex-col justify-center items-center"
+        className="w-full pizza-options flex flex-col justify-center items-center"
         initial={{ scaleY: 0 }}
         animate={{ scaleY: 1 }}
         exit={{ scaleY: 0 }}
@@ -34,19 +29,6 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
               </motion.p>
             )}
           </AnimatePresence>
-          <IconButton
-            onClick={() => {
-              setBetween(
-                Number(slicesVal == "" ? 0 : slicesVal) + 1,
-                "1",
-                "12",
-                setSlicesVal,
-                false
-              );
-            }}
-          >
-            <IoIosAddCircle />
-          </IconButton>
           <TextField
             {...register("no_of_slices", {
               required: { value: true, message: "This field is required" },
@@ -54,34 +36,25 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
               valueAsNumber: true,
               min: { value: 1, message: "Value must be between 1 and 12" },
               max: { value: 12, message: "Value must be between 1 and 12" },
+              validate: {
+                decimal: (val: any) =>
+                  parseInt(val) == val || "Must be a whole number",
+              },
             })}
             type="number"
             variant="outlined"
             aria-label="number of slices"
             inputProps={{
-              step: "any",
+              step: "1",
               inputMode: "numeric",
-              value: `${slicesVal}`,
+              min: 1,
+              max: 12,
+              defaultValue: 1,
             }}
-            onChange={(e) => {
-              setBetween(e.currentTarget.value, "", "12", setSlicesVal, false);
-            }}
+            className="w-32"
           />
-          <IconButton
-            onClick={() =>
-              setBetween(
-                Number(slicesVal == "" ? 0 : slicesVal) - 1,
-                "1",
-                "12",
-                setSlicesVal,
-                false
-              )
-            }
-          >
-            <IoIosRemoveCircle />
-          </IconButton>
         </div>
-        <InputLabel id="simple-select-outlined-label">
+        <InputLabel id="simple-select-outlined-label" className="mt-6">
           Diameter of pizza (1-60) *
         </InputLabel>
         <div className="w-full h-full relative py-2 flex flex-row justify-center items-center">
@@ -91,25 +64,12 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="h-min z-10 right-auto left-auto top-auto bottom-0 bg-slate-800 px-1 absolute text-sm text-red-400"
+                className="h-min text-center z-10 right-auto left-auto top-auto bottom-0 bg-slate-800 px-1 absolute text-sm text-red-400"
               >
                 {errors?.diameter?.message}
               </motion.p>
             )}
           </AnimatePresence>
-          <IconButton
-            onClick={() =>
-              setBetween(
-                Number(diameterVal == "" ? 0 : diameterVal) + 10,
-                "1",
-                "60",
-                setDiameterVal,
-                true
-              )
-            }
-          >
-            <IoIosAddCircle />
-          </IconButton>
           <TextField
             {...register("diameter", {
               required: { value: true, message: "This field is required" },
@@ -122,7 +82,7 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
                   return (
                     Number.isInteger(val) ||
                     val.toString().split(".")[1]?.length <= 2 ||
-                    "Max 2 decimal places allowed"
+                    "Only 2 decimal points allowed"
                   );
                 },
               },
@@ -130,28 +90,15 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
             type="number"
             variant="outlined"
             aria-label="pizza diameter"
-            className="overflow-hidden"
             inputProps={{
-              step: "0.01",
-              value: `${diameterVal}`,
+              step: "any",
+              inputMode: "numeric",
+              min: 1.0,
+              max: 60.0,
+              defaultValue: 1.0,
             }}
-            onChange={(e) => {
-              setBetween(e.currentTarget.value, "", "12", setDiameterVal, true);
-            }}
+            className="w-32"
           />
-          <IconButton
-            onClick={() =>
-              setBetween(
-                Number(diameterVal == "" ? 0 : diameterVal) - 1,
-                "1",
-                "60",
-                setDiameterVal,
-                true
-              )
-            }
-          >
-            <IoIosRemoveCircle />
-          </IconButton>
         </div>
       </motion.div>
     </AnimatePresence>

@@ -1,18 +1,14 @@
-import { useState } from "react";
-import { TextField, InputLabel, IconButton } from "@mui/material";
+import { TextField, InputLabel } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-import { IoIosAddCircle, IoIosRemoveCircle } from "react-icons/io";
-import setBetween from "../../functions/setBetween";
 
 const SoupOptions: React.FC<{ register: any; errors: any }> = ({
   register,
   errors,
 }) => {
-  const [spicinessVal, setSpicinessVal] = useState<string>("1");
   return (
     <AnimatePresence>
       <motion.div
-        className="flex flex-col justify-center items-center"
+        className="w-full flex flex-col justify-center items-center"
         initial={{ scaleY: 0 }}
         animate={{ scaleY: 1 }}
         exit={{ scaleY: 0 }}
@@ -31,19 +27,6 @@ const SoupOptions: React.FC<{ register: any; errors: any }> = ({
               {errors?.spiciness_scale?.message}
             </motion.p>
           )}
-          <IconButton
-            onClick={() =>
-              setBetween(
-                Number(spicinessVal == "" ? 0 : spicinessVal) + 1,
-                "1",
-                "10",
-                setSpicinessVal,
-                false
-              )
-            }
-          >
-            <IoIosAddCircle />
-          </IconButton>
           <TextField
             {...register("spiciness_scale", {
               required: { value: true, message: "This field is required" },
@@ -51,6 +34,10 @@ const SoupOptions: React.FC<{ register: any; errors: any }> = ({
               valueAsNumber: true,
               min: { value: 1, message: "Value must be between 1 and 10" },
               max: { value: 10, message: "Value must be between 1 and 10" },
+              validate: {
+                decimal: (val: any) =>
+                  parseInt(val) == val || "Must be a whole number",
+              },
             })}
             type="number"
             variant="outlined"
@@ -58,31 +45,12 @@ const SoupOptions: React.FC<{ register: any; errors: any }> = ({
             inputProps={{
               step: "any",
               inputMode: "numeric",
-              value: `${spicinessVal}`,
+              defaultValue: 1,
+              min: 1,
+              max: 10,
             }}
-            onChange={(e) =>
-              setBetween(
-                e.currentTarget.value,
-                "",
-                "10",
-                setSpicinessVal,
-                false
-              )
-            }
+            className="w-32"
           />
-          <IconButton
-            onClick={() =>
-              setBetween(
-                Number(spicinessVal == "" ? 0 : spicinessVal) - 1,
-                "1",
-                "10",
-                setSpicinessVal,
-                false
-              )
-            }
-          >
-            <IoIosRemoveCircle />
-          </IconButton>
         </div>
       </motion.div>
     </AnimatePresence>
