@@ -23,6 +23,7 @@ In order to clone the project repository run: <br/>
 ### 🔧 Install Node.js and npm
 Install from:
 `https://nodejs.org/en`
+Project Node version: v19.1.0
 
 #
 
