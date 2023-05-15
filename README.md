@@ -41,11 +41,14 @@ Run the following command:
 #
 
 ### 🎨 Desktop preview
-![image](https://github.com/bttobi/react-form-recruitment-task/assets/76923032/fe928941-9466-4719-a812-de6b5455b133)
-![image](https://github.com/bttobi/react-form-recruitment-task/assets/76923032/ba3bdc24-423e-425d-b8b2-b0126034897e)
+![image](https://github.com/bttobi/react-form-recruitment-task/assets/76923032/c6c65526-3d58-41f2-a385-a0b16e0be95a)
+![image](https://github.com/bttobi/react-form-recruitment-task/assets/76923032/a0bce9f1-971e-433f-bc39-3f05bcb7a86e)
+![image](https://github.com/bttobi/react-form-recruitment-task/assets/76923032/1b356283-4b1e-4574-8758-dec4060159f7)
 
 ### 🎨 Mobile preview
-![image](https://github.com/bttobi/react-form-recruitment-task/assets/76923032/d5017e65-2f9c-42e2-ae33-c062aaf02cb7)
-![image](https://github.com/bttobi/react-form-recruitment-task/assets/76923032/8e161d26-6819-4cfa-aa7d-ac1eb210d90b)
-![image](https://github.com/bttobi/react-form-recruitment-task/assets/76923032/633d9c1b-9de6-40c8-a8c1-f1d0ba57496a)
+![image](https://github.com/bttobi/react-form-recruitment-task/assets/76923032/632a1848-80ae-4c0b-b5a6-f85004bd4c36)
+![image](https://github.com/bttobi/react-form-recruitment-task/assets/76923032/5cff21cf-aef4-4d46-9604-a12e40dffc97)
+![image](https://github.com/bttobi/react-form-recruitment-task/assets/76923032/865f0512-c770-4517-96b5-fe9d44c7fac4)
+![image](https://github.com/bttobi/react-form-recruitment-task/assets/76923032/d5d79a98-b79a-47b0-a6c4-e4884cd8a4ad)
+
 
