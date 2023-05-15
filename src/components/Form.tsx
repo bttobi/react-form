@@ -9,7 +9,6 @@ import {
   MenuItem,
   Button,
 } from "@mui/material";
-import TailSpin from "react-loading-icons/dist/esm/components/tail-spin";
 import { motion, AnimatePresence } from "framer-motion";
 import DishOptions from "./DishOptions";
 import submitToApi from "../functions/submitToApi";
@@ -31,7 +30,6 @@ export const Form: React.FC = () => {
   const [showNotification, setshowNotification] = useState<boolean>(false);
   const [notificationMessage, setNotificationMessage] = useState<string>("");
   const [errorHappened, setErrorHappened] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiResponse, setApiResponse] = useState<string>("");
   const {
     register,
