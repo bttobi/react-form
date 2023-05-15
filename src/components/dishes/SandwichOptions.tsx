@@ -14,7 +14,7 @@ const SandwichOptions: React.FC<{ register: any; errors: any }> = ({
         exit={{ scaleY: 0 }}
       >
         <InputLabel id="simple-select-outlined-label">
-          Number of bread slices (1-6) *
+          Bread slices 🍞 (1-6) *
         </InputLabel>
         <div className="w-full h-full relative py-2 flex flex-row justify-center items-center">
           <AnimatePresence>

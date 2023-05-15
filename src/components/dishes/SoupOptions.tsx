@@ -14,7 +14,7 @@ const SoupOptions: React.FC<{ register: any; errors: any }> = ({
         exit={{ scaleY: 0 }}
       >
         <InputLabel id="simple-select-outlined-label">
-          Spiciness scale (1-10) *
+          Soup spiciness 🌶️ (1-10) *
         </InputLabel>
         <div className="w-full h-full relative py-2 flex flex-row justify-center items-center">
           {errors?.spiciness_scale && (

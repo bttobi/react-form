@@ -14,7 +14,7 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
         exit={{ scaleY: 0 }}
       >
         <InputLabel id="simple-select-outlined-label">
-          Number of slices (1-12) *
+          Pizza slices 🍕 (1-12) *
         </InputLabel>
         <div className="w-full h-full relative py-2 flex flex-row justify-center items-center">
           <AnimatePresence>
@@ -55,7 +55,7 @@ const PizzaOptions: React.FC<{ register: any; errors: any }> = ({
           />
         </div>
         <InputLabel id="simple-select-outlined-label" className="mt-6">
-          Diameter of pizza (1-60) *
+          Diameter of pizza 📐 (1-60) *
         </InputLabel>
         <div className="w-full h-full relative py-2 flex flex-row justify-center items-center">
           <AnimatePresence>
