@@ -7,7 +7,6 @@
     "paths": {
       "test-utils": ["./utils/test-utils"]
     },
-    "baseUrl": "src",
 
     /* Bundler mode */
     "moduleResolution": "bundler",
