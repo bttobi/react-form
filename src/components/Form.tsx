@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import TailSpin from "react-loading-icons/dist/esm/components/tail-spin";
 import {
   TextField,
   FormControl,
@@ -28,6 +29,7 @@ export const Form: React.FC = () => {
   const [showNotification, setshowNotification] = useState<boolean>(false);
   const [notificationMessage, setNotificationMessage] = useState<string>("");
   const [errorHappened, setErrorHappened] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiResponse, setApiResponse] = useState<string>("");
   const {
     register,
@@ -48,6 +50,7 @@ export const Form: React.FC = () => {
   const sendForm = async (data: FormInputs): Promise<void> => {
     //@ts-ignore
     errorTypes.forEach(({ name, type }) => setError(name, { type }));
+    setIsLoading(true);
 
     const response: any = await submitToApi(data);
     const toLog = await response.json();
@@ -58,6 +61,7 @@ export const Form: React.FC = () => {
       setErrorHappened(false);
       setNotificationMessage("Successfully sent to API!");
       setshowNotification(true);
+      setIsLoading(false);
       setTimeout(() => {
         setshowNotification(false);
       }, 3000);
@@ -66,6 +70,7 @@ export const Form: React.FC = () => {
     setErrorHappened(true);
     setNotificationMessage(toLog.body[0]);
     setshowNotification(true);
+    setIsLoading(false);
     setTimeout(() => {
       setshowNotification(false);
     }, 3000);
@@ -78,7 +83,7 @@ export const Form: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="p-10 px-10 rounded-xl shadow-lg shadow-black form-wrapper flex flex-col gap-4 justify-center align-center items-center bg-slate-800"
+        className="p-10 px-6 rounded-xl shadow-lg shadow-black form-wrapper flex flex-col gap-4 justify-center align-center items-center bg-slate-800"
       >
         <div className="w-full h-full relative px-1 py-2 flex flex-col justify-center items-center">
           <AnimatePresence>
@@ -180,8 +185,13 @@ export const Form: React.FC = () => {
           errors={errors}
           chosenDish={currentDish}
         />
-        <Button type="submit" variant="contained" color="success">
-          Submit
+        <Button
+          type="submit"
+          variant="contained"
+          color="success"
+          className="w-20 h-12"
+        >
+          {isLoading ? <TailSpin width="32px" /> : "Submit"}
         </Button>
       </motion.form>
       <AnimatePresence>
