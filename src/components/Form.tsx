@@ -43,14 +43,13 @@ export const Form: React.FC = () => {
       preparation_time: "00:01:00",
       type: "pizza",
     },
-    shouldUnregister: true,
+    mode: "onChange",
   });
   const options: string[] = ["pizza", "soup", "sandwich"];
 
   const sendForm = async (data: FormInputs): Promise<void> => {
     //@ts-ignore
     errorTypes.forEach(({ name, type }) => setError(name, { type }));
-    setIsLoading(true);
 
     if (Object.keys(errors).length != 0) {
       setIsLoading(false);
@@ -61,12 +60,14 @@ export const Form: React.FC = () => {
     const response: any = await submitToApi(data);
     const toLog = await response.json();
     reset();
-    if (response?.ok) {
+    if (response.ok) {
       const parsedResponse = JSON.stringify(toLog, null, "\n");
       setApiResponse(parsedResponse);
       setErrorHappened(false);
       setIsLoading(false);
-      setNotificationMessage("Successfully sent to API!");
+      setNotificationMessage(
+        ` code: ${response.status} - Successfully sent to API!`
+      );
       setshowNotification(true);
       setIsLoading(false);
       setTimeout(() => {
@@ -76,7 +77,8 @@ export const Form: React.FC = () => {
     }
     setErrorHappened(true);
     setIsLoading(false);
-    setNotificationMessage(toLog.body[0]);
+    console.log(response);
+    setNotificationMessage(` code: ${response.status} - ${toLog.body[0]}`);
     setshowNotification(true);
     setIsLoading(false);
     setTimeout(() => {
@@ -91,7 +93,8 @@ export const Form: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="p-10 px-6 rounded-xl shadow-lg shadow-black form-wrapper flex flex-col gap-4 justify-center align-center items-center bg-slate-800"
+        className="p-4 rounded-xl shadow-lg shadow-black form-wrapper flex flex-col gap-4 justify-center align-center items-center bg-slate-800"
+        noValidate
       >
         <div className="w-full h-full relative px-1 py-2 flex flex-col justify-center items-center">
           <AnimatePresence>
